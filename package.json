@@ -32,5 +32,9 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:8888"
+  "proxy": "http://localhost:8888",
+  "devDependencies": {
+    "@typescript-eslint/parser": "^4.3.0",
+    "eslint": "^7.10.0"
+  }
 }
