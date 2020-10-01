@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
-import userService from '../services/users'
+import React, {useState}from 'react'
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog, user, likeBlog }) => {
     const blogStyle = {
         paddingTop: 10,
         paddingLeft: 2,
@@ -9,29 +8,27 @@ const Blog = ({ blog, user }) => {
         borderWidth: 1,
         marginBottom: 5
     }
+    const [visible, setVisible] = useState(false)
 
-    const [blogUser, setBlogUser] = useState(null)
+    const showDetails = {display:visible?'':'none'}
 
-    const findBlogUser = async() => {
-        const blogUser = await userService.findUserbyID(`${blog.user}`)
-        setBlogUser(blogUser)
-        console.log(`user ${blogUser}`)
-    }
 
+    // const likeChecked = (blog) => {
+    //     console.log('like checked')
+    //     console.log(blog)
+    // }
+    
     return (
         <div style={blogStyle}>
             <div>
-                {blog.title} {blog.author} <button>view</button>
+                {blog.title} {blog.author} <button onClick={()=>setVisible(!visible)}>view</button>
             </div>
 
-            <div>
-                <p>details</p>
+            <div style={showDetails}>
                 {blog.url} <br/>
-                {blog.likes} <button>like</button><br/>
-                {/* {findBlogUser} */}
-                {user===null? null:user.name}
-                {/* {`added by ${blogUser.name}`} <br/> */}
-                {/* {blog.user.name === user.name? <button> remove</button>: null}  */}
+                {blog.likes} <button onClick={()=>likeBlog(blog)}>like</button><br/>
+                {`added by ${blog.user.username}`} <br/>
+                {user !== null && user.name === blog.user.name ? <button> remove</button>: null}
             </div>
         </div>
     )
