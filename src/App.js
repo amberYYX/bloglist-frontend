@@ -52,12 +52,25 @@ const App = () => {
         window.localStorage.removeItem('loggedNoteappUser')
     }
 
-    const addNewBlog = (blogObject) => {
+    // const addNewBlog = (blogObject) => {
 
-        blogService.create(blogObject).then(returnedBlog => {
-            setBlogs(blogs.concat(returnedBlog))
-            setMessage('a new blog has been added.')
-        })
+    //     blogService.create(blogObject).then(returnedBlog => {
+    //         setBlogs(blogs.concat(returnedBlog))
+    //         setMessage('a new blog has been added.')
+    //     })
+
+    // }
+
+
+    const addNewBlog = async(blogObject) => {
+
+        // const newAddedBlog =  await blogService.create(blogObject)
+
+        const afterAddedBlogs = await blogService.create(blogObject)
+
+        // setBlogs(blogs.concat(newAddedBlog))
+        setBlogs(afterAddedBlogs)
+        setMessage('a new blog has been added.')
 
     }
 
@@ -78,14 +91,34 @@ const App = () => {
     )
 
     const likeBlog = async(blog) => {
-        console.log('app like blog')
-
         const updateLikeBlog = await blogService.update(blog)
 
         
 
         const updatedBlogLists = blogs.map(blog=> blog.id === updateLikeBlog.id? updateLikeBlog:blog)
         setBlogs(updatedBlogLists)
+    }
+
+    const sortByLikes = (blogs) => {
+        // console.log(blogs)
+        // console.log(typeof(blogs[0].likes))
+        const sortedBlogs = [].slice.call(blogs).sort((a,b) => b.likes-a.likes)
+
+        // console.log(sortedBlogs)
+        setBlogs(sortedBlogs)
+
+    }
+
+    const deleteBlog = async(blog) => {
+
+        if (window.confirm(`Remove blog ${blog.title}`)) {
+            await blogService.remove(blog)
+            console.log('delete finished')
+            // const newBlogs = blogs.filter(blog => blog.id !== blog.id)
+            const newBlogs = blogs.filter(b => b.id !== blog.id)
+            // console.log(newBlogs)
+            setBlogs(newBlogs)
+        }
     }
 
 
@@ -107,15 +140,23 @@ const App = () => {
 
           
 
+            <div>
+                sort: most like <button onClick={()=>sortByLikes(blogs)}> sort </button>
+            </div>
       
 
             {blogs.map(blog =>
-                <Blog key={blog.id} blog={blog} user={user} likeBlog={likeBlog}/>
+                <Blog 
+                    key={blog.id} 
+                    blog={blog} 
+                    user={user} 
+                    likeBlog={likeBlog} 
+                    deleteBlog={deleteBlog}
+                />
             )}
       
       
         </div>
     )
 }
-
 export default App
