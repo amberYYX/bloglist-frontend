@@ -23,18 +23,8 @@ const create = async(newObject) => {
 }
 
 const update = async(object) => {
-    // const config = {
-    //     headers: {Authorization: token}
-    // }
-
-    // const update = {...object, likes: object.likes +1}
-    // console.log(`update, ${update}`)
-
     const update = {likes: object.likes + 1}
-
     const response = await axios.put(`${baseUrl}/${object.id}`, update)
-    // const response = await axios.put(`${baseUrl}/${object.id}`, update, config)
-
     return response.data
 }
 
@@ -43,7 +33,6 @@ const remove = async(object) => {
         headers: {Authorization: token}
     }
 
-    console.log(config)
     // delete() 第二个参数 直接是 token!!!
     await axios.delete(`${baseUrl}/${object.id}`,config)
     return null
